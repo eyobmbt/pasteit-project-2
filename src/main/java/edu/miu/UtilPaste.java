@@ -45,6 +45,8 @@ public interface UtilPaste {
 //Comparator.comparing(Map.Entry::getValue)
 */
 
+    // SAMI
+    // START
     Predicate<Role> isMember = r -> r instanceof Member;
 
     Function<Paste, Integer> getNumberOfPastViews = paste ->
@@ -57,15 +59,17 @@ public interface UtilPaste {
                     .map(u -> (Member) u)
                     .flatMap(u -> u.getPasteList().stream())
                     .filter(p -> p.getPasteDateTime().getYear() == year)
-                    .peek(System.out::println)
                     .collect((Collectors.groupingBy(
-                            Paste::getTitle,
+                            Paste::getNumOfViews,
                             Collectors.maxBy(Comparator.comparingInt(Paste::getNumOfViews)
                             ))))
                     .entrySet().stream()
                     .map(t -> t.getValue())
                     .limit(k)
                     .collect(Collectors.toList());
+
+
+    // END
 
 
     //ABDI

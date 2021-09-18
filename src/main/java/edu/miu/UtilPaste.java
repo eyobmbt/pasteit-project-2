@@ -1,6 +1,7 @@
 package edu.miu;
 
 import javax.swing.text.html.Option;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -65,4 +66,53 @@ public interface UtilPaste {
                     .map(t -> t.getValue())
                     .limit(k)
                     .collect(Collectors.toList());
+
+
+    //ABDI
+    //Start
+    Function<User, List<Member>> userToMember =
+            (user) -> Stream.of(user)
+                    .filter(role->role.getRoles() instanceof Member)
+                    .map(role->(Member) role.getRoles()).collect(Collectors.toList());
+
+    TriFunction<User,Integer,Long, List<Paste>> listOfKTopRatedPastesInAGivenYear =
+            (user, k, year) -> userToMember.apply(user).stream()
+                    .flatMap(paste -> paste.getPasteList().stream())
+                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+                    .flatMap(paste -> paste.getFeedbacks().stream())
+                    .collect(Collectors.groupingBy(Feedback::getPaste))
+                    .entrySet().stream()
+                    .map(listEntry -> new Tuple<Paste, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
+                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
+                    .limit(k)
+                    .map(memberLongTuple -> memberLongTuple.getKey())
+                    .collect(Collectors.toList());
+
+    TriFunction<User, Integer, Long, List<Member>> listActiveUserPerYear =
+            (user,kOfUser,year)-> userToMember.apply(user).stream()
+                    .flatMap(paste -> paste.getPasteList().stream())
+                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+                    .collect(Collectors.groupingBy(paste -> paste.getMemberId()))
+                    .entrySet().stream()
+                    .map(listEntry -> new Tuple<Member, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
+                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
+                    .limit(kOfUser)
+                    .map(memberLongTuple -> memberLongTuple.getKey())
+                    .collect(Collectors.toList());
+
+    BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPastInAGivenYear =
+            (user, year)-> userToMember.apply(user).stream()
+                    .flatMap(paste -> paste.getPasteList().stream())
+                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+                    .collect(Collectors.groupingBy(paste -> paste.getPasteDateTime().getMonth()))
+                    .entrySet().stream()
+                    .map(listEntry -> new Tuple<Month, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
+                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
+                    .limit(1)
+                    .map(memberLongTuple -> memberLongTuple.getKey())
+                    .findFirst();
+
+    //End
+
+
 }

@@ -16,6 +16,7 @@ class UtilPasteTest {
     public Role member3;
     public Role member4;
 
+    private Administrator administrator;
 
     private User user1;
     private User user2;
@@ -73,7 +74,7 @@ class UtilPasteTest {
 
         paste1 = new Paste(
                 "paste111", "int x = 5;", "how to initialize", Language.CPP, (Member) member1,
-                LocalDateTime.now().minusYears(1l), LocalDateTime.now());
+                LocalDateTime.now(), LocalDateTime.now());
         paste2 = new Paste(
                 "paste222", "System.out.prinln(5)", "print integer", Language.JAVA, (Member) member2,
                 LocalDateTime.now().minusYears(2l), LocalDateTime.now());
@@ -158,13 +159,24 @@ class UtilPasteTest {
 
         listOfUser.addAll(List.of(user1,user2,user3,user4));
 
+        administrator = new Administrator("4455");
+        administrator.addUsers(listOfUser);
+
     }
 
+//    @Test
+//   void getPastesWithHighestFeedbackTest() {
+//        List<Paste> pastes=List.of(paste1,paste2,paste4);
+//        List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(user1,3L);
+//        Assertions.assertEquals(pastes.get(0),selectedPaste.get(0));
+//
+//    }
+
     @Test
-   void getPastesWithHighestFeedbackTest() {
-        List<Paste> pastes=List.of(paste1,paste2,paste4);
-        List<Paste> selectedPaste=UtilPaste.getPastesWithHighestFeedback.apply(listOfUser,3L);
-        Assertions.assertEquals(pastes.get(0),selectedPaste.get(0));
+    void listActiveUserPerYearTest(){
+        List<Role> members = List.of(member1, member2, member3);
+        List<Member> selectedMember = UtilPaste.listActiveUserPerYear.apply(administrator, 2, 2021);
+        Assertions.assertEquals(members.get(0),selectedMember.get(0));
 
     }
 

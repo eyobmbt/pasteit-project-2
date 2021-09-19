@@ -178,9 +178,9 @@ class UtilPasteTest {
 
     @Test
     void getTopKMostViewedPasteTest() {
-        List<Optional<Paste>> topViewedPaste = UtilPaste.getTopKMostViewedPaste.apply(listOfUser, 3, LocalDate.now().minusYears(2l).getYear());
+        List<Paste> topViewedPaste = UtilPaste.getTopKMostViewedPaste.apply(listOfUser, 3, LocalDate.now().minusYears(2l).getYear());
 
-        Assertions.assertEquals(375, topViewedPaste.get(0).get().getNumOfViews());
+        Assertions.assertEquals(375, topViewedPaste.get(0).getNumOfViews());
     }
 
 }

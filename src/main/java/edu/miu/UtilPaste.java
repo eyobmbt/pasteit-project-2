@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 public interface UtilPaste {
 
 
-    BiFunction<List<User>,Long, List<Paste>> getPastesWithHighestFeedback=
-            (user,kOfPastes)->user.stream()
+    BiFunction<User,Long, List<Paste>> getPastesWithHighestFeedback=
+            (user,kOfPastes)->Stream.of(user)
                     .flatMap(u->u.getRoles().stream())
                     .filter(r-> r instanceof Member)
                     .map(r->(Member) r )
@@ -69,13 +69,27 @@ public interface UtilPaste {
 
     //ABDI
     //Start
+
     Function<User, List<Member>> userToMember =
             (user) -> Stream.of(user)
                     .filter(role->role.getRoles() instanceof Member)
                     .map(role->(Member) role.getRoles()).collect(Collectors.toList());
 
-    TriFunction<User,Integer,Long, List<Paste>> listOfKTopRatedPastesInAGivenYear =
-            (user, k, year) -> userToMember.apply(user).stream()
+    Function<List<User>, List<Member>> usersToMembers =
+            (users) -> users.stream()
+                    .flatMap(u -> u.getRoles().stream())
+                    .filter(u -> isMember.test(u))
+                    .map(u -> (Member) u)
+                    .collect(Collectors.toList());
+
+
+    Function<Administrator, List<User>> administratorToUsers =
+            (administrator) -> administrator.getUsers().stream()
+                    .collect(Collectors.toList());
+
+
+    TriFunction<Administrator,Integer,Long, List<Paste>> listOfKTopRatedPastesInAGivenYear =
+            (admin, k, year) -> usersToMembers.apply(administratorToUsers.apply(admin)).stream()
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
                     .flatMap(paste -> paste.getFeedbacks().stream())
@@ -87,8 +101,9 @@ public interface UtilPaste {
                     .map(memberLongTuple -> memberLongTuple.getKey())
                     .collect(Collectors.toList());
 
-    TriFunction<User, Integer, Long, List<Member>> listActiveUserPerYear =
-            (user,kOfUser,year)-> userToMember.apply(user).stream()
+    TriFunction<Administrator, Integer, Integer, List<Member>> listActiveUserPerYear =
+            (admin, kOfUser, year) ->
+                    Optional.ofNullable(usersToMembers.apply(administratorToUsers.apply(admin)).stream()
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
                     .collect(Collectors.groupingBy(paste -> paste.getMemberId()))
@@ -97,7 +112,7 @@ public interface UtilPaste {
                     .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
                     .limit(kOfUser)
                     .map(memberLongTuple -> memberLongTuple.getKey())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList())).orElse(null);
 
     BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPastInAGivenYear =
             (user, year)-> userToMember.apply(user).stream()

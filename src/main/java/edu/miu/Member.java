@@ -22,7 +22,14 @@ public class Member extends Role{
         this.pasteList = pasteList;
     }
 
-
+    @Override
+    public String toString() {
+        return "Member{" +
+                "subscribedDate=" + subscribedDate +
+                ", expireDate=" + expireDate +
+                ", pasteList=" + pasteList +
+                '}';
+    }
 
     public LocalDate getSubscribedDate() {
         return subscribedDate;

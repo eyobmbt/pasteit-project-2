@@ -14,14 +14,15 @@ import java.util.stream.Stream;
 
 public interface UtilPaste {
 
-
-    BiFunction<User,Long, List<Paste>> getPastesWithHighestFeedback=
-            (user,kOfPastes)->Stream.of(user)
+    //Eyob
+    //START
+    BiFunction<List<User>,Long, List<Paste>> getPastesWithHighestFeedback=
+            (user,kOfPastes)->user.stream()
                     .flatMap(u->u.getRoles().stream())
-                    .filter(r-> r instanceof Member)
-                    .map(r->(Member) r )
-                    .flatMap(p->p.getPasteList().stream())
-                    .flatMap(f->f.getFeedbacks().stream())
+                    .filter(role->role instanceof Member)
+                    .map(role->(Member) role )
+                    .flatMap(member->member.getPasteList().stream())
+                    .flatMap(fed->fed.getFeedbacks().stream())
                     .collect(Collectors.groupingBy(Feedback::getPaste,Collectors.counting()))
                     .entrySet().stream()
                     .sorted((e1,e2)->(e2.getValue().intValue()-e1.getValue().intValue()))
@@ -30,20 +31,22 @@ public interface UtilPaste {
                     .collect(Collectors.toList());
    // Comparator.comparing(Map.Entry::getValue)
 
-/*edu.miu.TriFunction<edu.miu.User,Integer,Long,List<edu.miu.Language>> listTopUsedLanguagesPerYear=
+TriFunction<List<User>,Integer,Integer,List<Language>> listTopUsedLanguagesPerYear=
         (user,kOfLanguages,year)->Stream.of(user)
-                .filter(role->role.getRole() instanceof edu.miu.Member)
-                .map(role->(edu.miu.Member) role.getRole())
+                .filter(role->role instanceof Member)
+                .map(role->(Member) role)
                 .flatMap(paste->paste.getPasteList().stream())
                 .filter(paste->paste.getPasteDateTime().getYear()==year)
-                .collect(Collectors.groupingBy(edu.miu.Paste::getLanguage,Collectors.counting()))
+                .collect(Collectors.groupingBy(Paste::getLanguage,Collectors.counting()))
                 .entrySet().stream()
                 .sorted((e1,e2)->(e2.getValue().intValue()-e1.getValue().intValue()))
                 .map(lang->lang.getKey())
                 .limit(kOfLanguages)
                 .collect(Collectors.toList());
 //Comparator.comparing(Map.Entry::getValue)
-*/
+
+
+    //END
 
     // SAMI
     // START

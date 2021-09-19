@@ -70,6 +70,8 @@ public class Paste {
         this.member = member;
         this.pasteDateTime = pasteDateTime;
         this.expiryDateTime = expiryDateTime;
+        this.numOfViews = 0;
+        this.rating = 0;
 
     }
 
@@ -120,6 +122,8 @@ public class Paste {
     public List<AdvertisePasteRecord> getAdvertisePaste() {
         return advertisePaste;
     }
+
+
 
     @Override
     public String toString() {

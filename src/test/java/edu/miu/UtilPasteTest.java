@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class UtilPasteTest {
     private Role admin;
@@ -15,6 +16,7 @@ class UtilPasteTest {
     public Role member2;
     public Role member3;
     public Role member4;
+    public Role member5;
 
     private Administrator administrator;
 
@@ -22,6 +24,7 @@ class UtilPasteTest {
     private User user2;
     private User user3;
     private User user4;
+    private User user5;
 
     private Feedback feedback1;
     private Feedback feedback2;
@@ -65,11 +68,13 @@ class UtilPasteTest {
         member2 = new Member(LocalDate.now(), LocalDate.now().plusDays(2l), "222");
         member3 = new Member(LocalDate.now().minusYears(3l), LocalDate.now().plusDays(4l), "333");
         member4 = new Member(LocalDate.now(), LocalDate.now().plusDays(1l), "444");
+        member5 = new Member(LocalDate.now(), LocalDate.now().plusDays(1l), "555");
 
         user1 = new User(111l, "abdi", "Abdi", "Wako", List.of(member1));
         user2 = new User(222l, "eyob", "Eyob", "Beyene", List.of(member2));
         user3 = new User(333l, "mengting", "Mengting", "Yao",List.of(member3));
         user4 = new User(444l, "sami", "Samson", "Desta", List.of(member4));
+        user5 = new User(555l, "guest", "Guest", "Guest", List.of(member5));
 
 
         paste1 = new Paste(
@@ -93,6 +98,7 @@ class UtilPasteTest {
         paste3.setRating(20);
         paste4.setRating(15);
         paste5.setRating(30);
+
         paste1.setNumOfViews(100);
         paste2.setNumOfViews(45);
         paste3.setNumOfViews(230);
@@ -103,6 +109,8 @@ class UtilPasteTest {
         ((Member) member2).setPasteList(List.of(paste2));
         ((Member) member3).setPasteList(List.of(paste3));
         ((Member) member4).setPasteList(List.of(paste4));
+        ((Member) member5).setPasteList(List.of(paste5));
+
 
 
         feedback1 = new Feedback("edu.miu.Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
@@ -157,7 +165,7 @@ class UtilPasteTest {
         pasteListMember3.addAll(List.of(paste3));
         pasteListMember4.addAll(List.of(paste4, paste5));
 
-        listOfUser.addAll(List.of(user1,user2,user3,user4));
+        listOfUser.addAll(List.of(user1,user2,user3,user4, user5));
 
         administrator = new Administrator("4455");
         administrator.addUsers(listOfUser);
@@ -178,6 +186,13 @@ class UtilPasteTest {
         List<Member> selectedMember = UtilPaste.listActiveUserPerYear.apply(administrator, 2, 2021);
         Assertions.assertEquals(members.get(0),selectedMember.get(0));
 
+    }
+
+    @Test
+    void getTopKMostViewedPasteTest() {
+        List<Optional<Paste>> topViewedPaste = UtilPaste.getTopKMostViewedPaste.apply(listOfUser, 3, LocalDate.now().minusYears(2l).getYear());
+
+        Assertions.assertEquals(375, topViewedPaste.get(0).get().getNumOfViews());
     }
 
 }

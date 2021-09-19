@@ -52,19 +52,14 @@ public interface UtilPaste {
     Function<Paste, Integer> getNumberOfPastViews = paste ->
             paste.getNumOfViews();
 
-    TriFunction<List<User>, Integer, Integer, List<Optional<Paste>>> getTopKMostViewedPaste = (user, k, year) ->
+    TriFunction<List<User>, Integer, Integer, List<Paste>> getTopKMostViewedPaste = (user, k, year) ->
             user.stream()
                     .flatMap(u -> u.getRoles().stream())
                     .filter(u -> isMember.test(u))
                     .map(u -> (Member) u)
                     .flatMap(u -> u.getPasteList().stream())
                     .filter(p -> p.getPasteDateTime().getYear() == year)
-                    .collect((Collectors.groupingBy(
-                            Paste::getNumOfViews,
-                            Collectors.maxBy(Comparator.comparingInt(Paste::getNumOfViews)
-                            ))))
-                    .entrySet().stream()
-                    .map(t -> t.getValue())
+                    .sorted(Comparator.comparingInt(Paste::getNumOfViews).reversed())
                     .limit(k)
                     .collect(Collectors.toList());
 

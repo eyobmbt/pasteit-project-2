@@ -113,39 +113,39 @@ class UtilPasteTest {
 
 
 
-        feedback1 = new Feedback("edu.miu.Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
+        feedback1 = new Feedback("Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
                 paste1, 111l, "abdi");
-        feedback2 = new Feedback("edu.miu.Feedback 2", "Nice help", LocalDateTime.now().minusMonths(3),
+        feedback2 = new Feedback("Feedback 2", "Nice help", LocalDateTime.now().minusMonths(3),
                 paste2, 111l, "abdi");
-        feedback3 = new Feedback("edu.miu.Feedback 3", "have problem with the code", LocalDateTime.now().minusMonths(3),
+        feedback3 = new Feedback("Feedback 3", "have problem with the code", LocalDateTime.now().minusMonths(3),
                 paste3, 111l, "abdi");
-        feedback4 = new Feedback("edu.miu.Feedback 4", "Great", LocalDateTime.now().minusMonths(2),
+        feedback4 = new Feedback("Feedback 4", "Great", LocalDateTime.now().minusMonths(2),
                 paste4, 111l, "abdi");
 
-        feedback5 = new Feedback("edu.miu.Feedback 5", "Great Help", LocalDateTime.now().minusMonths(5),
+        feedback5 = new Feedback("Feedback 5", "Great Help", LocalDateTime.now().minusMonths(5),
                 paste1, 111l, "abdi");
-        feedback6 = new Feedback("edu.miu.Feedback 6", "String need Capital?", LocalDateTime.now().minusMonths(5),
+        feedback6 = new Feedback("Feedback 6", "String need Capital?", LocalDateTime.now().minusMonths(5),
                 paste1, 111l, "abdi");
-        feedback7 = new Feedback("edu.miu.Feedback 7", "Right this is C++", LocalDateTime.now().minusMonths(5),
+        feedback7 = new Feedback("Feedback 7", "Right this is C++", LocalDateTime.now().minusMonths(5),
                 paste2, 111l, "abdi");
-        feedback8 = new Feedback("edu.miu.Feedback 8", "Not good", LocalDateTime.now().minusMonths(5),
+        feedback8 = new Feedback("Feedback 8", "Not good", LocalDateTime.now().minusMonths(5),
                 paste1, 333l, "mengting");
-        feedback9 = new Feedback("edu.miu.Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
+        feedback9 = new Feedback("Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
                 paste2, 333l, "mengting");
-        feedback10 = new Feedback("edu.miu.Feedback 2", "Nice help", LocalDateTime.now().minusMonths(3),
+        feedback10 = new Feedback("Feedback 2", "Nice help", LocalDateTime.now().minusMonths(3),
                 paste3, 333l, "mengting");
-        feedback11 = new Feedback("edu.miu.Feedback 3", "have problem with the code", LocalDateTime.now().minusMonths(3),
+        feedback11 = new Feedback("Feedback 3", "have problem with the code", LocalDateTime.now().minusMonths(3),
                 paste5, 333l, "mengting");
-        feedback12 = new Feedback("edu.miu.Feedback 4", "Great", LocalDateTime.now().minusMonths(2),
+        feedback12 = new Feedback("Feedback 4", "Great", LocalDateTime.now().minusMonths(2),
                 paste4, 333l, "abdi");
 
-        feedback13 = new Feedback("edu.miu.Feedback 5", "Great Help", LocalDateTime.now().minusMonths(5),
+        feedback13 = new Feedback("Feedback 5", "Great Help", LocalDateTime.now().minusMonths(5),
                 paste1, 444l, "sami");
-        feedback14 = new Feedback("edu.miu.Feedback 6", "String need Capital?", LocalDateTime.now().minusMonths(5),
+        feedback14 = new Feedback("Feedback 6", "String need Capital?", LocalDateTime.now().minusMonths(5),
                 paste1, 444l, "sami");
-        feedback15 = new Feedback("edu.miu.Feedback 7", "Right this is C++", LocalDateTime.now().minusMonths(5),
+        feedback15 = new Feedback("Feedback 7", "Right this is C++", LocalDateTime.now().minusMonths(5),
                 paste4, 444l, "sami");
-        feedback16 = new Feedback("edu.miu.Feedback 8", "Not good", LocalDateTime.now().minusMonths(5),
+        feedback16 = new Feedback("Feedback 8", "Not good", LocalDateTime.now().minusMonths(5),
                 paste1, 444l, "sami");
 
         feedbackListPaste1.addAll(List.of(feedback1, feedback5, feedback6, feedback8, feedback13, feedback14, feedback16));
@@ -172,13 +172,7 @@ class UtilPasteTest {
 
     }
 
-//    @Test
-//   void getPastesWithHighestFeedbackTest() {
-//        List<Paste> pastes=List.of(paste1,paste2,paste4);
-//        List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(user1,3L);
-//        Assertions.assertEquals(pastes.get(0),selectedPaste.get(0));
-//
-//    }
+
 
 
     @Test
@@ -189,7 +183,12 @@ class UtilPasteTest {
         Assertions.assertEquals(shouldReturn.get(0),selectedPaste.get(0));
 
     }
-
+       @Test
+   void getTopUsedLanguagesPerYearTest(){
+        List<Language> shouldReturn=List.of(Language.CPP,Language.JAVA);
+        List<Language> result=UtilPaste.listTopUsedLanguagesPerYear.apply(listOfUser,2,2020);
+       Assertions.assertEquals(shouldReturn.size(),result.size());
+   }
     @Test
     void getTopKMostViewedPasteTest() {
         List<Paste> topViewedPaste = UtilPaste.getTopKMostViewedPaste.apply(listOfUser, 3, LocalDate.now().minusYears(2l).getYear());

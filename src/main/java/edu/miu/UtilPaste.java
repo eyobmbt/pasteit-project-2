@@ -31,20 +31,20 @@ public interface UtilPaste {
                     .collect(Collectors.toList());
    // Comparator.comparing(Map.Entry::getValue)
 
-/*edu.miu.TriFunction<edu.miu.User,Integer,Long,List<edu.miu.Language>> listTopUsedLanguagesPerYear=
+TriFunction<List<User>,Integer,Integer,List<Language>> listTopUsedLanguagesPerYear=
         (user,kOfLanguages,year)->Stream.of(user)
-                .filter(role->role.getRole() instanceof edu.miu.Member)
-                .map(role->(edu.miu.Member) role.getRole())
+                .filter(role->role instanceof Member)
+                .map(role->(Member) role)
                 .flatMap(paste->paste.getPasteList().stream())
                 .filter(paste->paste.getPasteDateTime().getYear()==year)
-                .collect(Collectors.groupingBy(edu.miu.Paste::getLanguage,Collectors.counting()))
+                .collect(Collectors.groupingBy(Paste::getLanguage,Collectors.counting()))
                 .entrySet().stream()
                 .sorted((e1,e2)->(e2.getValue().intValue()-e1.getValue().intValue()))
                 .map(lang->lang.getKey())
                 .limit(kOfLanguages)
                 .collect(Collectors.toList());
 //Comparator.comparing(Map.Entry::getValue)
-*/
+
 
     //END
 

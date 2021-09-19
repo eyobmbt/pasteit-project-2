@@ -180,11 +180,13 @@ class UtilPasteTest {
 //
 //    }
 
+
     @Test
-    void listActiveUserPerYearTest(){
-        List<Role> members = List.of(member1, member2, member3);
-        List<Member> selectedMember = UtilPaste.listActiveUserPerYear.apply(administrator, 2, 2021);
-        Assertions.assertEquals(members.get(0),selectedMember.get(0));
+    void getPastesWithHighestFeedbackTest() {
+        List<Paste> shouldReturn=List.of(paste1,paste2,paste4);
+        List<Paste> selectedPaste=UtilPaste.getPastesWithHighestFeedback.apply(listOfUser,3L);
+        Assertions.assertEquals(shouldReturn.size(),selectedPaste.size());
+        Assertions.assertEquals(shouldReturn.get(0),selectedPaste.get(0));
 
     }
 

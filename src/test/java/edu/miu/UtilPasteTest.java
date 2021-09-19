@@ -8,24 +8,32 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 class UtilPasteTest {
-    private Role admin;
     public Role member1;
     public Role member2;
     public Role member3;
     public Role member4;
     public Role member5;
-
+    public Role member6;
+    List<Paste> pasteListMember1 = new ArrayList<>();
+    List<Paste> pasteListMember2 = new ArrayList<>();
+    List<Paste> pasteListMember3 = new ArrayList<>();
+    List<Paste> pasteListMember4 = new ArrayList<>();
+    List<Feedback> feedbackListPaste1 = new ArrayList<>();
+    List<Feedback> feedbackListPaste2 = new ArrayList<>();
+    List<Feedback> feedbackListPaste3 = new ArrayList<>();
+    List<Feedback> feedbackListPaste4 = new ArrayList<>();
+    List<Feedback> feedbackListPaste5 = new ArrayList<>();
+    List<User> listOfUser = new ArrayList<>();
+    private Role admin;
     private Administrator administrator;
-
     private User user1;
     private User user2;
     private User user3;
     private User user4;
     private User user5;
-
+    private User user6;
     private Feedback feedback1;
     private Feedback feedback2;
     private Feedback feedback3;
@@ -42,24 +50,12 @@ class UtilPasteTest {
     private Feedback feedback14;
     private Feedback feedback15;
     private Feedback feedback16;
-
     private Paste paste1;
     private Paste paste2;
     private Paste paste3;
     private Paste paste4;
     private Paste paste5;
-    List<Paste> pasteListMember1 = new ArrayList<>();
-    List<Paste> pasteListMember2 = new ArrayList<>();
-    List<Paste> pasteListMember3 = new ArrayList<>();
-    List<Paste> pasteListMember4 = new ArrayList<>();
-
-    List<Feedback> feedbackListPaste1 = new ArrayList<>();
-    List<Feedback> feedbackListPaste2 = new ArrayList<>();
-    List<Feedback> feedbackListPaste3 = new ArrayList<>();
-    List<Feedback> feedbackListPaste4 = new ArrayList<>();
-    List<Feedback> feedbackListPaste5 = new ArrayList<>();
-
-    List<User> listOfUser = new ArrayList<>();
+    private Paste paste6;
 
     @BeforeEach
     void setup() {
@@ -69,12 +65,14 @@ class UtilPasteTest {
         member3 = new Member(LocalDate.now().minusYears(3l), LocalDate.now().plusDays(4l), "333");
         member4 = new Member(LocalDate.now(), LocalDate.now().plusDays(1l), "444");
         member5 = new Member(LocalDate.now(), LocalDate.now().plusDays(1l), "555");
+        member6 = new Member(LocalDate.now(), LocalDate.now().plusDays(1l), "777");
 
         user1 = new User(111l, "abdi", "Abdi", "Wako", List.of(member1));
         user2 = new User(222l, "eyob", "Eyob", "Beyene", List.of(member2));
-        user3 = new User(333l, "mengting", "Mengting", "Yao",List.of(member3));
+        user3 = new User(333l, "mengting", "Mengting", "Yao", List.of(member3));
         user4 = new User(444l, "sami", "Samson", "Desta", List.of(member4));
         user5 = new User(555l, "guest", "Guest", "Guest", List.of(member5));
+        user6 = new User(444l, "abebe", "Abebe", "Aye", List.of(member6));
 
 
         paste1 = new Paste(
@@ -93,24 +91,30 @@ class UtilPasteTest {
                 "paste444", "def (2+5)", "function def", Language.PYTHON, (Member) member4,
                 LocalDateTime.now().minusYears(2l), LocalDateTime.now());
 
+        paste6 = new Paste(
+                "paste777", "def (2+7)", "function def", Language.PYTHON, (Member) member4,
+                LocalDateTime.now().minusYears(1l), LocalDateTime.now());
+
         paste1.setRating(10);
         paste2.setRating(5);
         paste3.setRating(20);
         paste4.setRating(15);
         paste5.setRating(30);
+        paste6.setRating(40);
 
         paste1.setNumOfViews(100);
         paste2.setNumOfViews(45);
         paste3.setNumOfViews(230);
         paste4.setNumOfViews(145);
         paste5.setNumOfViews(375);
+        paste6.setNumOfViews(130);
 
         ((Member) member1).setPasteList(List.of(paste1));
         ((Member) member2).setPasteList(List.of(paste2));
         ((Member) member3).setPasteList(List.of(paste3));
         ((Member) member4).setPasteList(List.of(paste4));
         ((Member) member5).setPasteList(List.of(paste5));
-
+        ((Member) member6).setPasteList(List.of(paste6));
 
 
         feedback1 = new Feedback("Feedback 1", "Thank you", LocalDateTime.now().minusMonths(5),
@@ -165,7 +169,7 @@ class UtilPasteTest {
         pasteListMember3.addAll(List.of(paste3));
         pasteListMember4.addAll(List.of(paste4, paste5));
 
-        listOfUser.addAll(List.of(user1,user2,user3,user4, user5));
+        listOfUser.addAll(List.of(user1, user2, user3, user4, user5, user6));
 
         administrator = new Administrator("4455");
         administrator.addUsers(listOfUser);
@@ -173,27 +177,49 @@ class UtilPasteTest {
     }
 
 
-
-
     @Test
     void getPastesWithHighestFeedbackTest() {
-        List<Paste> shouldReturn=List.of(paste1,paste2,paste4);
-        List<Paste> selectedPaste=UtilPaste.getPastesWithHighestFeedback.apply(listOfUser,3L);
-        Assertions.assertEquals(shouldReturn.size(),selectedPaste.size());
-        Assertions.assertEquals(shouldReturn.get(0),selectedPaste.get(0));
+        List<Paste> shouldReturn = List.of(paste1, paste2, paste4);
+        List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfUser, 3L);
+        Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
+        Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
 
     }
-       @Test
-   void getTopUsedLanguagesPerYearTest(){
-        List<Language> shouldReturn=List.of(Language.CPP,Language.JAVA);
-        List<Language> result=UtilPaste.listTopUsedLanguagesPerYear.apply(listOfUser,2,2020);
-       Assertions.assertEquals(shouldReturn.size(),result.size());
-   }
+
+    @Test
+    void getTopUsedLanguagesPerYearTest() {
+        List<Language> shouldReturn = List.of(Language.CPP, Language.JAVA);
+        List<Language> result = UtilPaste.listTopUsedLanguagesPerYear.apply(listOfUser, 2, 2020);
+        Assertions.assertEquals(shouldReturn.size(), result.size());
+    }
+
     @Test
     void getTopKMostViewedPasteTest() {
         List<Paste> topViewedPaste = UtilPaste.getTopKMostViewedPaste.apply(listOfUser, 3, LocalDate.now().minusYears(2l).getYear());
 
         Assertions.assertEquals(375, topViewedPaste.get(0).getNumOfViews());
     }
+
+    @Test
+    void getTopKRewardWithRateAndNumberOfViewedPasteTest() {
+        List<Paste> getTopKMostViewdAndRating = UtilPaste.getTopKRewardWithRateAndNumberOfViewedPaste.apply(
+                listOfUser, 2, LocalDate.now().minusYears(1l).getYear()
+        );
+
+        // compare paste4 and paste6, i.e. user4 and user 6
+        Assertions.assertEquals(130, getTopKMostViewdAndRating.get(0).getNumOfViews());
+    }
+
+    @Test
+    void getTopKWorstRatedPasteTest () {
+        List<Paste> getTopKWorstRatedPaste = UtilPaste.getTopKWorstRatedPaste.apply(
+                listOfUser, 2, LocalDate.now().minusYears(1l).getYear()
+        );
+
+        // compare paste4 and paste6, i.e. user4 and user 6
+        Assertions.assertEquals(15, getTopKWorstRatedPaste.get(0).getRating());
+    }
+
+
 
 }

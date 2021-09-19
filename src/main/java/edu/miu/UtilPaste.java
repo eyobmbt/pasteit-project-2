@@ -55,6 +55,9 @@ TriFunction<List<User>,Integer,Integer,List<Language>> listTopUsedLanguagesPerYe
     Function<Paste, Integer> getNumberOfPastViews = paste ->
             paste.getNumOfViews();
 
+    Function<Paste, Integer> getRatingForPaste = paste ->
+            paste.getRating();
+
     TriFunction<List<User>, Integer, Integer, List<Paste>> getTopKMostViewedPaste = (user, k, year) ->
             user.stream()
                     .flatMap(u -> u.getRoles().stream())
@@ -66,6 +69,29 @@ TriFunction<List<User>,Integer,Integer,List<Language>> listTopUsedLanguagesPerYe
                     .limit(k)
                     .collect(Collectors.toList());
 
+    TriFunction<List<User>, Integer, Integer, List<Paste>> getTopKWorstRatedPaste = (user, k, year) ->
+            user.stream()
+                    .flatMap(u -> u.getRoles().stream())
+                    .filter(u -> isMember.test(u))
+                    .map(u -> (Member) u)
+                    .flatMap(u -> u.getPasteList().stream())
+                    .filter(p -> p.getPasteDateTime().getYear() == year)
+                    .sorted((p1, p2) -> p1.getRating() - p2.getRating())
+                    .limit(k)
+                    .collect(Collectors.toList());
+
+    TriFunction<List<User>, Integer, Integer, List<Paste>> getTopKRewardWithRateAndNumberOfViewedPaste = (user, k, year) ->
+            user.stream()
+                    .flatMap(u -> u.getRoles().stream())
+                    .filter(u -> isMember.test(u))
+                    .map(u -> (Member) u)
+                    .flatMap(u -> u.getPasteList().stream())
+                    .filter(p -> p.getPasteDateTime().getYear() == year)
+                    .sorted(Comparator.comparingInt(Paste::getNumOfViews).reversed())
+                    .sorted((p1, p2) -> (p2.getNumOfViews() + p2.getRating()) - (p1.getNumOfViews() + p1.getRating()))
+                    .peek(System.out::println)
+                    .limit(k)
+                    .collect(Collectors.toList());
 
     // END
 

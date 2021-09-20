@@ -72,6 +72,7 @@ class UtilPasteTest {
     List<Feedback> feedbackListPaste7 = new ArrayList<>();
 
     List<User> listOfUser = new ArrayList<>();
+    List<User> listOfMemberUsers= new ArrayList<>();
 
 
 
@@ -217,6 +218,7 @@ class UtilPasteTest {
 //        pasteListMember4.addAll(List.of(paste4, paste5));
 
         listOfUser.addAll(List.of(user1, user2, user3, user4, user5, user6));
+        listOfMemberUsers.addAll(List.of(user1, user2, user3, user4));
 
         administrator = new Administrator("4455");
         administrator.addUsers(listOfUser);
@@ -227,12 +229,11 @@ class UtilPasteTest {
     @Test
     void getPastesWithHighestFeedbackTest() {
         List<Paste> shouldReturn = List.of(paste1, paste2, paste4);
-        List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfUser, 3L);
+        List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfMemberUsers, 3L);
         Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
         Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
 
     }
-
     @Test
     void getTopUsedLanguagesPerYearTest() {
         List<Language> shouldReturn = List.of(Language.CPP, Language.JAVA);
@@ -251,10 +252,20 @@ class UtilPasteTest {
     @Test
     void getTopKMembersWithMostPastesOnGivenYearTest(){
         List<Member> shouldReturn= List.of((Member)member4);
-        List<Member> result=UtilPaste.getTopKMembersWithMostPastesOnaGivenYear.apply(listOfUser,1,2020);
+        List<Member> result=UtilPaste.getTopKMembersWithMostPastesOnaGivenYear.apply(listOfMemberUsers,2,2020);
         Assertions.assertEquals(shouldReturn.get(0),result.get(0));
         Assertions.assertEquals(shouldReturn.size(),result.size());
 
+    }
+
+    @Test
+    void listKTotalExpiredPastesByGivenYearTest(){
+        List<Paste> shouldReturn = List.of(paste1, paste2,paste3, paste4);
+        List<Paste> result= UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser,2021,4);
+        Assertions.assertEquals(shouldReturn.size(), result.size());
+        Assertions.assertEquals(shouldReturn.get(0), result.get(0));
+        List<Paste> result1= UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser,2022,4);
+        Assertions.assertFalse(result1.size()==shouldReturn.size());
     }
 
     @Test

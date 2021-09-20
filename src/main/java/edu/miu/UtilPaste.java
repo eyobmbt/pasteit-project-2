@@ -1,6 +1,7 @@
 package edu.miu;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
@@ -180,6 +181,15 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .limit(1)
                     .map(memberLongTuple -> memberLongTuple.getKey())
                     .findFirst();
+    TriFunction<List<User>,Integer,Integer,List<Paste>> listKTotalExpiredPastesByGivenYear=
+            (users,year,k)->users.stream()
+                    .flatMap(ro->ro.getRoles().stream())
+                    .filter(rol->rol instanceof Member)
+                    .map((role->(Member)role))
+                    .flatMap(meb->meb.getPasteList().stream())
+                    .filter(pastes->pastes.getExpiryDateTime().getYear()==year)
+                    .limit(k)
+                    .collect(Collectors.toList());
 
     //End
 

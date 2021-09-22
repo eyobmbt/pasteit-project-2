@@ -8,6 +8,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class UtilPasteTest {
     private Role admin;
@@ -229,11 +233,51 @@ class UtilPasteTest {
     @Test
     void getPastesWithHighestFeedbackTest() {
         List<Paste> shouldReturn = List.of(paste1, paste2, paste4);
+        List<Paste> shouldReturn1 = List.of(paste1, paste2, paste4);
         List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfMemberUsers, 3L);
         Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
         Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
 
     }
+@Test
+void checkCastingandPasteViewRating(){
+    Integer views=UtilPaste.getNumberOfPastViews.apply(paste1);
+    Integer rates=UtilPaste.getRatingForPaste.apply(paste1);
+    boolean res= UtilPaste.isMember.test(member1);
+       Assertions.assertTrue(res);
+       Assertions.assertEquals(100,views);
+       Assertions.assertEquals(10,rates);
+}
+@Test
+void userToMemberTest(){
+
+    List<Member> falseMember=List.of((Member) member4);
+    List<Member> members=List.of((Member) member1);
+List<Member> resultMembers= UtilPaste.usersToMembers.apply(List.of(user1)) ;
+Assertions.assertEquals(members.get(0),resultMembers.get(0));
+Assertions.assertFalse(falseMember.get(0).equals(resultMembers.get(0)));
+
+
+
+}
+@Test
+void administratorToUsersTest(){
+
+      List<User>  administrators= UtilPaste.administratorToUsers.apply(administrator);
+      List<User> results=List.of(user1,user2,user3,user4,user5,user6);
+      Assertions.assertEquals(administrators.size(),results.size());
+      Assertions.assertTrue(administrators.get(0).getUserId().
+              equals(results.get(0).getUserId()));
+}
+
+@Test
+void usersToMembersTest(){
+    List<Member> membersOfUser=List.of((Member) member1, (Member)member2, (Member)member3, (Member)member4);
+    List<Member> members=UtilPaste.usersToMembers.apply(listOfMemberUsers);
+    Assertions.assertEquals(members.size(),membersOfUser.size());
+    Assertions.assertEquals(members.get(0),membersOfUser.get(0));
+
+}
     @Test
     void getTopUsedLanguagesPerYearTest() {
         List<Language> shouldReturn = List.of(Language.CPP, Language.JAVA);

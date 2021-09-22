@@ -9,14 +9,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-=======
 import java.util.Optional;
->>>>>>> upstream/main
 
 class UtilPasteTest {
     private Role admin;

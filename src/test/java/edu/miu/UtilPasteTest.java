@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class UtilPasteTest {
     private Role admin;
@@ -233,8 +235,6 @@ class UtilPasteTest {
         List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfMemberUsers, 3L);
         Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
         Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
-        Assertions.assertEquals(shouldReturn.get(2), selectedPaste.get(2));
-        Assertions.assertFalse(shouldReturn.get(1)==selectedPaste.get(2));
 
     }
 
@@ -304,6 +304,14 @@ class UtilPasteTest {
         List<Role> members = List.of(member1, member2, member3);
         List<Member> selectedMember = UtilPaste.listActiveUserPerYear.apply(administrator, 2, 2021);
         Assertions.assertEquals(members.get(0), selectedMember.get(0));
+    }
+
+    @Test
+    void aMonthWithTheHighestPastInAGivenYear() {
+        Optional<Month> peakMonth = UtilPaste.aMonthWithTheHighestPasteInAGivenYear.apply(listOfMemberUsers, LocalDateTime.now().minusYears(1l).getYear());
+        Assertions.assertEquals(Month.SEPTEMBER, peakMonth.get());
+        Assertions.assertFalse(Month.JULY.equals(peakMonth.get()));
+
     }
 
 

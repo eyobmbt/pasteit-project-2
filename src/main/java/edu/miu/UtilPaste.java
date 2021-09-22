@@ -126,7 +126,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
     //ABDI
     //Start
 
-    Function<User, List<Member>> userToMember =
+    Function<User, List<Member>> userToMembers =
             (user) -> Stream.of(user)
                     .filter(role->role.getRoles() instanceof Member)
                     .map(role->(Member) role.getRoles()).collect(Collectors.toList());
@@ -171,7 +171,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .collect(Collectors.toList())).orElse(null);
 
     BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPastInAGivenYear =
-            (user, year)-> userToMember.apply(user).stream()
+            (user, year)-> userToMembers.apply(user).stream()
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
                     .collect(Collectors.groupingBy(paste -> paste.getPasteDateTime().getMonth()))
@@ -190,6 +190,14 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .filter(pastes->pastes.getExpiryDateTime().getYear()==year)
                     .limit(k)
                     .collect(Collectors.toList());
+
+
+    BiFunction<User ,Long,Long> TotalFeedbacksInaGiveYear=
+            (user,year)-> userToMembers.apply(user).stream()
+                    .flatMap(paste -> paste.getPasteList().stream())
+                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+                    .flatMap(fed->fed.getFeedbacks().stream())
+                    .count();
 
     //End
 

@@ -13,7 +13,7 @@ public class Paste {
     private LocalDateTime pasteDateTime;
     private LocalDateTime expiryDateTime;
     private List<Feedback> feedbacks;
-    private List<AdvertisePasteRecord> advertisePaste;
+
     private int numOfViews;
     private int rating;
 
@@ -47,8 +47,8 @@ public class Paste {
 
     public Paste(String pasteId, String content, String title, String url, String description,
                  Language language, Member member, LocalDateTime pasteDateTime,
-                 LocalDateTime expiryDateTime, List<Feedback> feedbacks,
-                 List<AdvertisePasteRecord> advertisePaste) {
+                 LocalDateTime expiryDateTime, List<Feedback> feedbacks
+                 ) {
         this.pasteId = pasteId;
         this.content = content;
         this.title = title;
@@ -59,7 +59,7 @@ public class Paste {
         this.pasteDateTime = pasteDateTime;
         this.expiryDateTime = expiryDateTime;
         this.feedbacks = feedbacks;
-        this.advertisePaste = advertisePaste;
+
     }
 
     public Paste(String pasteId, String content, String title, Language language, Member member, LocalDateTime pasteDateTime, LocalDateTime expiryDateTime) {
@@ -117,10 +117,6 @@ public class Paste {
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;
-    }
-
-    public List<AdvertisePasteRecord> getAdvertisePaste() {
-        return advertisePaste;
     }
 
 

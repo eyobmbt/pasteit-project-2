@@ -170,17 +170,30 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .map(memberLongTuple -> memberLongTuple.getKey())
                     .collect(Collectors.toList())).orElse(null);
 
-    BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPastInAGivenYear =
-            (user, year)-> userToMembers.apply(user).stream()
-                    .flatMap(paste -> paste.getPasteList().stream())
-                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
-                    .collect(Collectors.groupingBy(paste -> paste.getPasteDateTime().getMonth()))
-                    .entrySet().stream()
-                    .map(listEntry -> new Tuple<Month, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
-                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
-                    .limit(1)
-                    .map(memberLongTuple -> memberLongTuple.getKey())
-                    .findFirst();
+    BiFunction<List<User>, Integer, Optional<Month>> aMonthWithTheHighestPasteInAGivenYear =
+            (users, year)  ->
+                    usersToMembers.apply(users).stream()
+                            .map(u -> u.getPasteList())
+                            .flatMap(p -> p.stream())
+                            .filter(p -> p.getPasteDateTime().getYear() == year)
+                            .collect(Collectors.groupingBy(p -> p.getPasteDateTime().getMonth(), Collectors.counting()))
+                            .entrySet()
+                            .stream()
+                            .sorted((m1, m2) -> (int) (m2.getValue() - m1.getValue()))
+                            .map(m -> m.getKey())
+                            .findFirst();
+
+//    BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPasteInAGivenYear =
+//            (user, year)-> userToMembers.apply(user).stream()
+//                    .flatMap(paste -> paste.getPasteList().stream())
+//                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+//                    .collect(Collectors.groupingBy(paste -> paste.getPasteDateTime().getMonth()))
+//                    .entrySet().stream()
+//                    .map(listEntry -> new Tuple<Month, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
+//                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
+//                    .limit(1)
+//                    .map(memberLongTuple -> memberLongTuple.getKey())
+//                    .findFirst();
     TriFunction<List<User>,Integer,Integer,List<Paste>> listKTotalExpiredPastesByGivenYear=
             (users,year,k)->users.stream()
                     .flatMap(ro->ro.getRoles().stream())

@@ -6,12 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+=======
+import java.util.Optional;
+>>>>>>> upstream/main
 
 class UtilPasteTest {
     private Role admin;
@@ -344,6 +349,14 @@ void usersToMembersTest(){
         List<Role> members = List.of(member1, member2, member3);
         List<Member> selectedMember = UtilPaste.listActiveUserPerYear.apply(administrator, 2, 2021);
         Assertions.assertEquals(members.get(0), selectedMember.get(0));
+    }
+
+    @Test
+    void aMonthWithTheHighestPastInAGivenYear() {
+        Optional<Month> peakMonth = UtilPaste.aMonthWithTheHighestPasteInAGivenYear.apply(listOfMemberUsers, LocalDateTime.now().minusYears(1l).getYear());
+        Assertions.assertEquals(Month.SEPTEMBER, peakMonth.get());
+        Assertions.assertFalse(Month.JULY.equals(peakMonth.get()));
+
     }
 
 

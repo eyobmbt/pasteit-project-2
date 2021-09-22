@@ -229,11 +229,15 @@ class UtilPasteTest {
     @Test
     void getPastesWithHighestFeedbackTest() {
         List<Paste> shouldReturn = List.of(paste1, paste2, paste4);
+        List<Paste> shouldReturn1 = List.of(paste1, paste2, paste4);
         List<Paste> selectedPaste = UtilPaste.getPastesWithHighestFeedback.apply(listOfMemberUsers, 3L);
         Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
         Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
+        Assertions.assertEquals(shouldReturn.get(2), selectedPaste.get(2));
+        Assertions.assertFalse(shouldReturn.get(1)==selectedPaste.get(2));
 
     }
+
     @Test
     void getTopUsedLanguagesPerYearTest() {
         List<Language> shouldReturn = List.of(Language.CPP, Language.JAVA);

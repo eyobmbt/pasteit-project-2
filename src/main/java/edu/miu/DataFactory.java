@@ -42,10 +42,10 @@ public class DataFactory {
     private Feedback feedback17;
     private Feedback feedback18;
 
-    private Paste paste1;
-    private Paste paste2;
+    public Paste paste1;
+    public Paste paste2;
     private Paste paste3;
-    private Paste paste4;
+    public Paste paste4;
     private Paste paste5;
     private Paste paste6;
     private Paste paste7;

@@ -145,7 +145,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .collect(Collectors.toList());
 
 
-    TriFunction<Administrator,Integer,Long, List<Paste>> listOfKTopRatedPastesInAGivenYear =
+    TriFunction<Administrator,Integer,Long, List<Paste>> listOfKTopFeedbackPastesInAGivenYear =
             (admin, k, year) -> usersToMembers.apply(administratorToUsers.apply(admin)).stream()
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
@@ -157,6 +157,18 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .limit(k)
                     .map(memberLongTuple -> memberLongTuple.getKey())
                     .collect(Collectors.toList());
+//    TriFunction<Administrator,Integer,Long, List<Paste>> listOfKTopRatedPastesInAGivenYear =
+//            (admin, k, year) -> usersToMembers.apply(administratorToUsers.apply(admin)).stream()
+//                    .flatMap(paste -> paste.getPasteList().stream())
+//                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
+//                    .flatMap(paste -> paste.getFeedbacks().stream())
+//                    .collect(Collectors.groupingBy(Feedback::getPaste))
+//                    .entrySet().stream()
+//                    .map(listEntry -> new Tuple<Paste, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
+//                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
+//                    .limit(k)
+//                    .map(memberLongTuple -> memberLongTuple.getKey())
+//                    .collect(Collectors.toList());
 
     TriFunction<Administrator, Integer, Integer, List<Member>> listActiveUserPerYear =
             (admin, kOfUser, year) ->
@@ -195,16 +207,23 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .limit(k)
                     .collect(Collectors.toList());
 
-
     BiFunction<User ,Long,Long> TotalFeedbacksInaGiveYear=
             (user,year)-> userToMembers.apply(user).stream()
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
                     .flatMap(fed->fed.getFeedbacks().stream())
-                    .filter(f -> f.getUserName().equals(user.getUsername()))
-                    .count();
+                    .collect(Collectors.groupingBy(f -> f.getId(), Collectors.counting()))
+                    .entrySet()
+                    .stream()
+                    .mapToLong(p -> p.getValue())
+                    .sum();
 
-    //End
 
+    TriFunction<List<Paste>,Long, Long,Long> TotalFeedbacksInGivenYearForAlistofPasts=
+            (pastes,userId,year)->pastes.stream()
+            .flatMap(paste->paste.getFeedbacks().stream())
+            .filter(feedback->feedback.getDateTime().getYear()==year)
+                    .filter(feedback -> feedback.getUserId()==userId)
+            .count();
 
 }

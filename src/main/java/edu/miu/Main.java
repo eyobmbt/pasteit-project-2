@@ -32,12 +32,11 @@ public class Main {
         System.out.println("5: Get Top K Most Viewed Paste");
         System.out.println("6: List K Worst Rated Pastes");
         System.out.println("7: List Top K Reward With Rate And Number of Viewed Pastes");
-        System.out.println("8: List Of K Top Rated Pastes In A Given Year");
+        System.out.println("8: List Of K Top Feedbacks Pastes In A Given Year");
         System.out.println("9: List Active Users Per Year");
         System.out.println("10: Month With The Highest Paste in A Given Year");
         System.out.println("11: list K Total Expired Pastes By Given Year");
         System.out.println("12: Find the total Feedbacks in a Give Year");
-        System.out.println("13: Get All Pastes With Highest Feedback");
     }
     public static void listOfFunctions(int num) {
         DataFactory data = new DataFactory();
@@ -121,7 +120,7 @@ public class Main {
                 year = in.nextInt();
                 System.out.println("Enter K: ");
                 k = in.nextInt();
-                List<Paste> pastes4 = listOfKTopRatedPastesInAGivenYear.apply(data.administrator, k, (long)year);
+                List<Paste> pastes4 = listOfKTopFeedbackPastesInAGivenYear.apply(data.administrator, k, (long)year);
                 for (Paste paste:pastes4) {
                     System.out.println(paste);
                 }
@@ -153,10 +152,13 @@ public class Main {
                 }
                 break;
             case 12:
+                List<Paste> listOfPaste = List.of(data.paste1, data.paste2, data.paste4);
+                System.out.println("Enter the commenter Id:");
+                long commnter= (long) in.nextInt();
                 System.out.println("Enter the year:");
                 year= in.nextInt();
-                long totalFeedBack=TotalFeedbacksInaGiveYear.apply(data.user4, (long)year);
-                System.out.println("Total Feedback: "+totalFeedBack);
+                long total=TotalFeedbacksInGivenYearForAlistofPasts.apply(listOfPaste,commnter,(long)year);
+                System.out.println("Total Feedbacks given by user: "+total);
                 break;
             case 0:
                 break;

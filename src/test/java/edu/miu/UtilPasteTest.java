@@ -74,11 +74,7 @@ class UtilPasteTest {
     List<Feedback> feedbackListPaste7 = new ArrayList<>();
 
     List<User> listOfUser = new ArrayList<>();
-    List<User> listOfMemberUsers= new ArrayList<>();
-
-
-
-
+    List<User> listOfMemberUsers = new ArrayList<>();
 
 
     @BeforeEach
@@ -237,45 +233,48 @@ class UtilPasteTest {
         Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
 
     }
-@Test
-void checkCastingandPasteViewRating(){
-    Integer views=UtilPaste.getNumberOfPastViews.apply(paste1);
-    Integer rates=UtilPaste.getRatingForPaste.apply(paste1);
-    boolean res= UtilPaste.isMember.test(member1);
-       Assertions.assertTrue(res);
-       Assertions.assertEquals(100,views);
-       Assertions.assertEquals(10,rates);
-}
-@Test
-void userToMemberTest(){
 
-    List<Member> falseMember=List.of((Member) member4);
-    List<Member> members=List.of((Member) member1);
-List<Member> resultMembers= UtilPaste.usersToMembers.apply(List.of(user1)) ;
-Assertions.assertEquals(members.get(0),resultMembers.get(0));
-Assertions.assertFalse(falseMember.get(0).equals(resultMembers.get(0)));
+    @Test
+    void checkCastingandPasteViewRating() {
+        Integer views = UtilPaste.getNumberOfPastViews.apply(paste1);
+        Integer rates = UtilPaste.getRatingForPaste.apply(paste1);
+        boolean res = UtilPaste.isMember.test(member1);
+        Assertions.assertTrue(res);
+        Assertions.assertEquals(100, views);
+        Assertions.assertEquals(10, rates);
+    }
+
+    @Test
+    void userToMemberTest() {
+
+        List<Member> falseMember = List.of((Member) member4);
+        List<Member> members = List.of((Member) member1);
+        List<Member> resultMembers = UtilPaste.usersToMembers.apply(List.of(user1));
+        Assertions.assertEquals(members.get(0), resultMembers.get(0));
+        Assertions.assertFalse(falseMember.get(0).equals(resultMembers.get(0)));
 
 
+    }
 
-}
-@Test
-void administratorToUsersTest(){
+    @Test
+    void administratorToUsersTest() {
 
-      List<User>  administrators= UtilPaste.administratorToUsers.apply(administrator);
-      List<User> results=List.of(user1,user2,user3,user4,user5,user6);
-      Assertions.assertEquals(administrators.size(),results.size());
-      Assertions.assertTrue(administrators.get(0).getUserId().
-              equals(results.get(0).getUserId()));
-}
+        List<User> administrators = UtilPaste.administratorToUsers.apply(administrator);
+        List<User> results = List.of(user1, user2, user3, user4, user5, user6);
+        Assertions.assertEquals(administrators.size(), results.size());
+        Assertions.assertTrue(administrators.get(0).getUserId().
+                equals(results.get(0).getUserId()));
+    }
 
-@Test
-void usersToMembersTest(){
-    List<Member> membersOfUser=List.of((Member) member1, (Member)member2, (Member)member3, (Member)member4);
-    List<Member> members=UtilPaste.usersToMembers.apply(listOfMemberUsers);
-    Assertions.assertEquals(members.size(),membersOfUser.size());
-    Assertions.assertEquals(members.get(0),membersOfUser.get(0));
+    @Test
+    void usersToMembersTest() {
+        List<Member> membersOfUser = List.of((Member) member1, (Member) member2, (Member) member3, (Member) member4);
+        List<Member> members = UtilPaste.usersToMembers.apply(listOfMemberUsers);
+        Assertions.assertEquals(members.size(), membersOfUser.size());
+        Assertions.assertEquals(members.get(0), membersOfUser.get(0));
 
-}
+    }
+
     @Test
     void getTopUsedLanguagesPerYearTest() {
         List<Language> shouldReturn = List.of(Language.CPP, Language.JAVA);
@@ -284,30 +283,30 @@ void usersToMembersTest(){
     }
 
     @Test
-    void getHighestPastesBySizeUsernameOngivenYearTest(){
-        List<Paste> shouldReturn=List.of(paste4);
-        List<Paste> selectedPaste=UtilPaste.getHighestPastesBySizeUsernameOngivenYear.apply(user4,1,2020);
-        Assertions.assertEquals(shouldReturn.get(0),selectedPaste.get(0));
-        Assertions.assertEquals(shouldReturn.size(),selectedPaste.size());
+    void getHighestPastesBySizeUsernameOngivenYearTest() {
+        List<Paste> shouldReturn = List.of(paste4);
+        List<Paste> selectedPaste = UtilPaste.getHighestPastesBySizeUsernameOngivenYear.apply(user4, 1, 2020);
+        Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
+        Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
     }
 
     @Test
-    void getTopKMembersWithMostPastesOnGivenYearTest(){
-        List<Member> shouldReturn= List.of((Member)member4);
-        List<Member> result=UtilPaste.getTopKMembersWithMostPastesOnaGivenYear.apply(listOfMemberUsers,2,2020);
-        Assertions.assertEquals(shouldReturn.get(0),result.get(0));
-        Assertions.assertEquals(shouldReturn.size(),result.size());
+    void getTopKMembersWithMostPastesOnGivenYearTest() {
+        List<Member> shouldReturn = List.of((Member) member4);
+        List<Member> result = UtilPaste.getTopKMembersWithMostPastesOnaGivenYear.apply(listOfMemberUsers, 2, 2020);
+        Assertions.assertEquals(shouldReturn.get(0), result.get(0));
+        Assertions.assertEquals(shouldReturn.size(), result.size());
 
     }
 
     @Test
-    void listKTotalExpiredPastesByGivenYearTest(){
-        List<Paste> shouldReturn = List.of(paste1, paste2,paste3, paste4);
-        List<Paste> result= UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser,2021,4);
+    void listKTotalExpiredPastesByGivenYearTest() {
+        List<Paste> shouldReturn = List.of(paste1, paste2, paste3, paste4);
+        List<Paste> result = UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser, 2021, 4);
         Assertions.assertEquals(shouldReturn.size(), result.size());
         Assertions.assertEquals(shouldReturn.get(0), result.get(0));
-        List<Paste> result1= UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser,2022,4);
-        Assertions.assertFalse(result1.size()==shouldReturn.size());
+        List<Paste> result1 = UtilPaste.listKTotalExpiredPastesByGivenYear.apply(listOfUser, 2022, 4);
+        Assertions.assertFalse(result1.size() == shouldReturn.size());
     }
 
     @Test
@@ -328,7 +327,7 @@ void usersToMembersTest(){
     }
 
     @Test
-    void getTopKWorstRatedPasteTest () {
+    void getTopKWorstRatedPasteTest() {
         List<Paste> getTopKWorstRatedPaste = UtilPaste.getTopKWorstRatedPaste.apply(
                 listOfUser, 2, LocalDate.now().minusYears(1l).getYear()
         );
@@ -352,6 +351,29 @@ void usersToMembersTest(){
 
     }
 
+    @Test
+    void listOfKTopFeedbackPastesInAGivenYearTest() {
+        List<Paste> shouldReturn = List.of(paste4, paste2);
+        List<Paste> selectedPaste = UtilPaste.listOfKTopFeedbackPastesInAGivenYear.apply(
+                administrator, 2, 2020l);
+        Assertions.assertEquals(shouldReturn.size(), selectedPaste.size());
+        Assertions.assertEquals(shouldReturn.get(0), selectedPaste.get(0));
 
 
+    }
+
+    @Test
+    void TotalFeedbacksInaGiveYearTest() {
+        Long TotalFeedbacksInaGiveYear = UtilPaste.TotalFeedbacksInaGiveYear.apply(user6, 2020l);
+        Assertions.assertEquals( 0,TotalFeedbacksInaGiveYear);
+    }
+
+@Test
+    void totalFeedbacksInGivenYearForAlistofPastsTest(){
+    List<Paste> listOfPaste = List.of(paste1, paste2, paste4);
+
+   Long result= UtilPaste.TotalFeedbacksInGivenYearForAlistofPasts.apply(listOfPaste,111L,2021L);
+    Assertions.assertEquals(result, 6);
+
+}
 }

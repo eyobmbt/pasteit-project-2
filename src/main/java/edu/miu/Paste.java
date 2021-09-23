@@ -47,8 +47,7 @@ public class Paste {
 
     public Paste(String pasteId, String content, String title, String url, String description,
                  Language language, Member member, LocalDateTime pasteDateTime,
-                 LocalDateTime expiryDateTime, List<Feedback> feedbacks
-                 ) {
+                 LocalDateTime expiryDateTime, List<Feedback> feedbacks) {
         this.pasteId = pasteId;
         this.content = content;
         this.title = title;
@@ -123,7 +122,7 @@ public class Paste {
 
     @Override
     public String toString() {
-        return "edu.miu.Paste{" +
+        return "{" +
                 "pasteId='" + pasteId + '\'' +
                 ", title='" + title + '\'' +
                 '}';

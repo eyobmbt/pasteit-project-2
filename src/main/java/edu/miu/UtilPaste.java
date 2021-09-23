@@ -118,6 +118,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .sorted((p1, p2) -> (p2.getNumOfViews() + p2.getRating()) - (p1.getNumOfViews() + p1.getRating()))
                     .peek(System.out::println)
                     .limit(k)
+
                     .collect(Collectors.toList());
 
     // END
@@ -183,17 +184,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                             .map(m -> m.getKey())
                             .findFirst();
 
-//    BiFunction<User, Integer, Optional<Month>> aMonthWithTheHighestPasteInAGivenYear =
-//            (user, year)-> userToMembers.apply(user).stream()
-//                    .flatMap(paste -> paste.getPasteList().stream())
-//                    .filter(paste -> paste.getPasteDateTime().getYear() == year )
-//                    .collect(Collectors.groupingBy(paste -> paste.getPasteDateTime().getMonth()))
-//                    .entrySet().stream()
-//                    .map(listEntry -> new Tuple<Month, Long>(listEntry.getKey(), listEntry.getValue().stream().count()))
-//                    .sorted((o1, o2) -> o2.getValue().intValue() - o1.getValue().intValue())
-//                    .limit(1)
-//                    .map(memberLongTuple -> memberLongTuple.getKey())
-//                    .findFirst();
+
     TriFunction<List<User>,Integer,Integer,List<Paste>> listKTotalExpiredPastesByGivenYear=
             (users,year,k)->users.stream()
                     .flatMap(ro->ro.getRoles().stream())
@@ -210,6 +201,7 @@ TriFunction<List<User>, Integer, Integer, List<Language>> listTopUsedLanguagesPe
                     .flatMap(paste -> paste.getPasteList().stream())
                     .filter(paste -> paste.getPasteDateTime().getYear() == year )
                     .flatMap(fed->fed.getFeedbacks().stream())
+                    .filter(f -> f.getUserName().equals(user.getUsername()))
                     .count();
 
     //End

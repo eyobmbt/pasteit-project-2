@@ -24,8 +24,8 @@ public class Member extends Role{
 
     @Override
     public String toString() {
-        return "Member{" +
-                "subscribedDate=" + subscribedDate +
+        return "Member{ Member Id:" +getRoleId()+
+                ", subscribedDate=" + subscribedDate +
                 ", expireDate=" + expireDate +
                 ", pasteList=" + pasteList +
                 '}';
